@@ -1,39 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function Player({ initiaName, symbol }) {
-    const [isEditing, setIsEditing] = useState(false);
-    const [playerName, setPlayerName] = useState(initiaName);
+export default function Player({ initiaName, symbol, isActive, winnerName }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [playerName, setPlayerName] = useState(initiaName);
 
-    function handleEditClick() {
-        setIsEditing((editing) => !editing);
-
+  useEffect(() => {
+    // Khi winnerName thay đổi, kiểm tra xem playerName có phải là người thắng không
+    if (winnerName === playerName) {
+      setIsEditing(false); // Khi có người thắng, tự động đóng chế độ sửa đổi tên
     }
+  }, [winnerName, playerName]);
 
-    function handleChange(event) {
-        console.log(event);
-        {/* no se giu gia tri ma nguoi dung co nhap trc khi no dc ghi de boi gia tri truoc do */}
-        setPlayerName(event.target.value);
+  function handleEditClick() {
+    setIsEditing((editing) => !editing);
+  }
 
-           
-    }
+  function handleChange(event) {
+    setPlayerName(event.target.value);
+  }
 
-    let editablePlayerName = <span className="player-name">{playerName}</span>;
+  let editablePlayerName = <span className="player-name">{playerName}</span>;
 
-    if (isEditing) {
-        editablePlayerName = <input type="text" required value={playerName} onChange={handleChange} />
-    }
+  if (isEditing) {
+    editablePlayerName = <input type="text" required value={playerName} onChange={handleChange} />;
+  }
 
-
-
-
-    return (
-        <li>
-            <span className="player">
-                {editablePlayerName}
-                <span className="player-symbol">{symbol}</span>
-            </span>
-            <button onClick={handleEditClick}>{isEditing ? 'Save' : 'Edit'}</button>
-
-        </li>
-    );
+  return (
+    <li className={isActive ? 'active' : undefined}>
+      <span className="player">
+        {editablePlayerName}
+        <span className="player-symbol">{symbol}</span>
+      </span>
+      <button onClick={handleEditClick}>{isEditing ? 'Save' : 'Edit'}</button>
+    </li>
+  );
 }

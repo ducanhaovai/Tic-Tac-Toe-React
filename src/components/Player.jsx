@@ -1,18 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState } from 'react';
 
-export default function Player({ initiaName, symbol, isActive, winnerName }) {
+export default function Player({
+  initialName,
+  symbol,
+  isActive,
+  onChangeName,
+}) {
+  const [playerName, setPlayerName] = useState(initialName);
   const [isEditing, setIsEditing] = useState(false);
-  const [playerName, setPlayerName] = useState(initiaName);
-
-  useEffect(() => {
-    // Khi winnerName thay đổi, kiểm tra xem playerName có phải là người thắng không
-    if (winnerName === playerName) {
-      setIsEditing(false); // Khi có người thắng, tự động đóng chế độ sửa đổi tên
-    }
-  }, [winnerName, playerName]);
 
   function handleEditClick() {
     setIsEditing((editing) => !editing);
+
+    if (isEditing) {
+      onChangeName(symbol, playerName);
+    }
   }
 
   function handleChange(event) {
@@ -20,9 +22,13 @@ export default function Player({ initiaName, symbol, isActive, winnerName }) {
   }
 
   let editablePlayerName = <span className="player-name">{playerName}</span>;
+  // let btnCaption = 'Edit';
 
   if (isEditing) {
-    editablePlayerName = <input type="text" required value={playerName} onChange={handleChange} />;
+    editablePlayerName = (
+      <input type="text" required value={playerName} onChange={handleChange} />
+    );
+    // btnCaption = 'Save';
   }
 
   return (

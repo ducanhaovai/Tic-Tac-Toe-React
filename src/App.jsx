@@ -98,7 +98,7 @@ function App() {
   }
 
   return (
-    <main>
+    <>
       <div id="game-container">
         <ol id="players" className="highlight-player">
           <Player
@@ -118,9 +118,11 @@ function App() {
           <GameOver winner={winner} onRestart={handleRestart} />
         )}
         <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
+
+
       </div>
       <Log turns={gameTurns} />
-    </main>
+    </>
   );
 }
 
